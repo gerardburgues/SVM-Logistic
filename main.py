@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from sklearn import svm, datasets
+from sklearn import svm, datasets, metrics
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn import preprocessing
@@ -11,6 +11,11 @@ from sklearn.metrics import f1_score, precision_recall_curve, average_precision_
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+import missingno as msno
+
 
 def dropData(data):
 
@@ -146,10 +151,39 @@ def PCAFunc(data):
     pca.fit(data)
     print(" explained variance ration", pca.explained_variance_ratio_,"\n")
     print("singular" , pca.singular_values_)
+def NearestNeighbour(X,y):
+    """X_train, X_test, y_train, y_test = train_test_split(X, y,stratify = y, test_size = 0.7, random_state = 42)
+    nca = NeighborhoodComponentsAnalysis(random_state=42)
+    knn = KNeighborsClassifier(n_neighbors=3)
+    nca_pipe = Pipeline([('nca', nca), ('knn', knn)])
+    nca_pipe.fit(X_train, y_train)
+    print(nca_pipe.score(X_test, y_test))"""
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
+
+    knn = KNeighborsClassifier(n_neighbors=5)
+
+    # Train the model using the training sets
+    knn.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = knn.predict(X_test)
+    print(y_pred)
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+def NullsNumber(data):
+    "The below graphs show that the number of missing values are high in: Sunshine, Evaporation, Cloud3pm and Cloud9am."
+    msno.heatmap(data)
+    plt.show()
+    msno.bar(data, sort="ascending")
+    plt.show()
+    print((data.isnull().sum() / len(data)) * 100)
+
+
 if __name__ == "__main__":
 
     data = pd.read_csv('weatherAUS.csv')
     print("Choose what type of Normalization you want: Standard or MinMax : \n")
+    NullsNumber(data)
     NormType =  input()
     #print("How Nan affect Data: choose deleting rows (DEL) or NAn = mean value (MEAN) \n")
     #NanType = input()
@@ -161,12 +195,14 @@ if __name__ == "__main__":
     if Encoder == "Hot":
         data = OneHotEncoder(data)
     else:
+        data = OneHotEncoder(data)
         #data = OrdinalEncoderFunc(data)
         print("Not Ready")
 
     if NormType == "MinMax":
         data = NormalizeData(data)
     else:
+        data = NormalizeData(data)
         print("StandarizeData() Does not work because does not go 0 to 1")
         #data = StandarizeData(data)
 
@@ -174,7 +210,8 @@ if __name__ == "__main__":
     print(X)
     print(y)
     PCAFunc(data)
-    SVMLogistic(X,y)
+    #SVMLogistic(X,y)
+    NearestNeighbour(X,y)
 
 
 
