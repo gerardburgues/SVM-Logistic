@@ -14,6 +14,7 @@ from sklearn.decomposition import PCA
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from DataAnalysis import DataAnalysis
 import missingno as msno
 
 
@@ -182,7 +183,9 @@ def NullsNumber(data):
 if __name__ == "__main__":
 
     data = pd.read_csv('weatherAUS.csv')
+    DataAnalysis(data)
     print("Choose what type of Normalization you want: Standard or MinMax : \n")
+
     NullsNumber(data)
     NormType =  input()
     #print("How Nan affect Data: choose deleting rows (DEL) or NAn = mean value (MEAN) \n")
@@ -207,11 +210,11 @@ if __name__ == "__main__":
         #data = StandarizeData(data)
 
     X,y = SplitData(data)
-    print(X)
-    print(y)
+    #print(X)
+    #print(y)
     PCAFunc(data)
     #SVMLogistic(X,y)
-    NearestNeighbour(X,y)
+    #NearestNeighbour(X,y)
 
 
 
