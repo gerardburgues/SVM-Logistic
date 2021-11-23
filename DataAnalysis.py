@@ -32,15 +32,28 @@ def DataAnalysis(data):
     data = data.join(RainToday)
     data = data.join(RainTomorrow)
 
-    data = data.drop(["RainToday", "RainTomorrow"], axis=1)
+
     print(data)
 
+    fig, ax = plt.subplots(1, 2)
+
+
+    plt.figure(figsize=(20, 20))
+    sns.countplot(data=data, x='RainToday', ax=ax[0])
+    sns.countplot(data=data, x='RainTomorrow', ax=ax[1])
+    plt.show()
+
+    sns.violinplot(x='RainTomorrow', y='MinTemp', data=data, hue='RainTomorrow')
+    plt.show()
+
+    data = data.drop(["RainToday", "RainTomorrow"], axis=1)
+    """
     correlation = data.corr()
     plt.figure(figsize=(20, 12))
     plt.title('Correlació de correlació')
     ax = sns.heatmap(correlation, square=True, annot=True, fmt='.2f', linecolor='white')
     ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=30)
-    plt.show()
+    plt.show()*/"""
 
     # Estan balancejades les etiquetes (distribució similar entre categories)? Creus que pot afectar a la classificació la seva distribució?
