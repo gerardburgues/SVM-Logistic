@@ -43,6 +43,7 @@ def DataAnalysis(data):
     sns.countplot(data=data, x='RainTomorrow', ax=ax[1])
     plt.show()
 
+    #Aquí s'han anat canviant els paramentres MaxTemp i MinTemp
     sns.violinplot(x='RainTomorrow', y='MinTemp', data=data, hue='RainTomorrow')
     plt.show()
 
