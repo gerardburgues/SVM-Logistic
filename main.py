@@ -120,24 +120,27 @@ def Logistic(X, y):
     plt.ylabel('y')
     plt.xlabel('x')
     plt.show()
-    # ROCFunction(y_v, probs, 3)
+   
 
 
 def SVM(X, y):
-    x_t, x_v, y_t, y_v = train_test_split(X, y, test_size=0.2)
+    particions = [0.5, 0.7, 0.8]
 
-    print("We are here 0")
-    # Creem el regresor logístic
-    svc = svm.SVC(C=5.0, kernel='rbf', gamma=0.9, probability=True, max_iter=500)
+    for part in particions:
+        x_t, x_v, y_t, y_v = train_test_split(X, y, test_size=0.2)
 
-    # l'entrenem
-    print("We are here 1")
-    print(len(x_t))
-    svc.fit(x_t, y_t)
-    print("We are here 2")
-    probs = svc.predict_proba(x_v)
-    print("We are here 3")
-    print("Correct classification SVM      ", 0.2, "% of the data: ", svc.score(x_v, y_v))
+        print("We are here 0")
+        # Creem el regresor logístic
+        svc = svm.SVC(C=5.0, kernel='rbf', gamma=0.9, probability=True, max_iter=500)
+
+        # l'entrenem
+        print("We are here 1")
+        print(len(x_t))
+        svc.fit(x_t, y_t)
+        print("We are here 2")
+        probs = svc.predict_proba(x_v)
+        print("We are here 3")
+        print("Correct classification SVM      ", 0.2, "% of the data: ", svc.score(x_v, y_v))
 
 
 def SVMCrossVal(X, y):
@@ -210,42 +213,6 @@ def NormalizeData(data):
     return dataNormalize
 
 
-def ROCFunction(y_v, probs, n_classes=3):
-    # Compute Precision-Recall and plot curve
-    precision = {}
-    recall = {}
-    average_precision = {}
-    plt.figure()
-    for i in range(n_classes):
-        print(y_v)
-        print(probs[:, i])
-        precision[i], recall[i], _ = precision_recall_curve(y_v == i, probs[:, i])
-        average_precision[i] = average_precision_score(y_v == i, probs[:, i])
-
-        plt.plot(recall[i], precision[i],
-                 label='Precision-recall curve of class {0} (area = {1:0.2f})'
-                       ''.format(i, average_precision[i]))
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
-        plt.legend(loc="upper right")
-
-    # Compute ROC curve and ROC area for each class
-    fpr = {}
-    tpr = {}
-    roc_auc = {}
-    for i in range(n_classes):
-        fpr[i], tpr[i], _ = roc_curve(y_v == i, probs[:, i])
-        roc_auc[i] = auc(fpr[i], tpr[i])
-
-    # Compute micro-average ROC curve and ROC area
-    # Plot ROC curve
-    plt.figure()
-    for i in range(n_classes):
-        plt.plot(fpr[i], tpr[i], label='ROC curve of class {0} (area = {1:0.2f})' ''.format(i, roc_auc[i]))
-    plt.legend()
-    plt.show()
-
-
 def PCAFunc(data):
     pca = PCA(n_components=2)
     pca.fit(data)
@@ -306,10 +273,12 @@ def NullsNumber(data):
     print((data.isnull().sum() / len(data)) * 100)
 
 
+
+
 if __name__ == "__main__":
     tic = time.perf_counter()
     data = pd.read_csv('weatherAUS.csv')
-    DataAnalysis(data)
+    #DataAnalysis(data)
     NullsNumber(data)
     data = TransformingData(data)
     data = NullData(data)
@@ -317,22 +286,14 @@ if __name__ == "__main__":
     data = Encoder(data)
     # data= HotEncoderFunc(data)
     # Showing HeatMap
-    correlation = data.corr()
-    plt.figure(figsize=(20, 12))
-    plt.title('Correlació de correlació')
-    ax = sns.heatmap(correlation, square=True, annot=True, fmt='.2f', linecolor='white')
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set_yticklabels(ax.get_yticklabels(), rotation=30)
-    plt.show()
     data = NormalizeData(data)
-
     X, y = SplitData(data)
     # print(X)
     # print(y)
     # PCAFunc(data)
-    # SVM(X,y)
+    SVM(X,y)
     #Logistic(X, y)
-    NearestNeighbour(X,y)
+    #NearestNeighbour(X,y)
     # SVMCrossVal(X,y)
     # LogisticCrossVal(X,y)
     # NearestNeighbourCrossVal(X,y)

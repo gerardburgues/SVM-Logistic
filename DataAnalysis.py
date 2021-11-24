@@ -27,10 +27,9 @@ def DataAnalysis(data):
     print("Existeixen diferents categroies, per exemple: ") #Revisar Categories
 
     # Podeu veure alguna correlació entre X i y?
-    RainToday = pd.get_dummies(data["RainToday"], prefix="RT_")
-    RainTomorrow = pd.get_dummies(data["RainTomorrow"], prefix="RTm_")
-    data = data.join(RainToday)
-    data = data.join(RainTomorrow)
+    data['RainTomorrow'] = data['RainTomorrow'].map({'Yes': 1, 'No': 0})
+    data['RainToday'] = data['RainToday'].map({'Yes': 1, 'No': 0})
+
 
 
     print(data)
@@ -47,14 +46,15 @@ def DataAnalysis(data):
     sns.violinplot(x='RainTomorrow', y='MinTemp', data=data, hue='RainTomorrow')
     plt.show()
 
-    data = data.drop(["RainToday", "RainTomorrow"], axis=1)
-    """
+
+
     correlation = data.corr()
     plt.figure(figsize=(20, 12))
     plt.title('Correlació de correlació')
     ax = sns.heatmap(correlation, square=True, annot=True, fmt='.2f', linecolor='white')
     ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=30)
-    plt.show()*/"""
 
+    plt.savefig("HeatMap.png", bbox_inches="tight")
+    plt.show()
     # Estan balancejades les etiquetes (distribució similar entre categories)? Creus que pot afectar a la classificació la seva distribució?
