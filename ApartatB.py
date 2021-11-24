@@ -15,19 +15,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 
-
 def readDataset():
-    pd.read_csv('Iris.csv')
+    return pd.read_csv('Iris.csv')
+
 
 def defineData(df):
     x = df[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']]
     y = df['Species']
     return x, y
 
+
 def encodeData(y):
     encoder = LabelEncoder()
     y = encoder.fit_transform(y)
     return y
+
 
 def LogisticRegression_Model():
     lr_model = LogisticRegression()
@@ -35,11 +37,13 @@ def LogisticRegression_Model():
     lr_predict = lr_model.predict(x_test)
     print('Logistic Regression - Accuracy: ', accuracy_score(lr_predict, y_test))
 
+
 def SVM_Model():
     svm_model = svm.SVC(kernel='linear')
     svm_model.fit(x_train, y_train)
     svc_predict = svm_model.predict(x_test)
     print('SVM - Accuracy: ', accuracy_score(svc_predict, y_test))
+
 
 def RandomForest_Model():
     rfc_model = RandomForestClassifier(max_depth=3)
@@ -47,17 +51,13 @@ def RandomForest_Model():
     rfc_predict = rfc_model.predict(x_test)
     print('Random Forest - Accuracy: ', accuracy_score(rfc_predict, y_test))
 
-def RandomForest2_Model():
-    rfc = RandomForestClassifier()
-    scores = cross_val_score(rfc, x, y, cv=5, scoring='accuracy')
-    model_scores = np.mean(scores)
-    print("Random Forest Score : " + str(np.mean(scores)))
 
 def KNN_Model():
     knn_model = KNeighborsClassifier(n_neighbors=5)
     knn_model.fit(x_train, y_train)
     knn_predict = knn_model.predict(x_test)
     print('knn - Accuracy', accuracy_score(knn_predict, y_test))
+
 
 if __name__ == "__main__":
     df = readDataset()
@@ -67,5 +67,5 @@ if __name__ == "__main__":
     LogisticRegression_Model()
     SVM_Model()
     RandomForest_Model()
-    RandomForest2_Model
+
     KNN_Model()

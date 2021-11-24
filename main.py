@@ -205,7 +205,6 @@ def NormalizeData(data):
 
     min_max = MinMaxScaler()
     dataNormalize = min_max.fit_transform(data)
-
     dataNormalize = pd.DataFrame(dataNormalize)
 
     return dataNormalize
@@ -264,7 +263,7 @@ def NearestNeighbour(X, y):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    knn = KNeighborsClassifier(n_neighbors=20)
+    knn = KNeighborsClassifier(n_neighbors=2)
 
     # Train the model using the training sets
     knn.fit(X_train, y_train)
@@ -272,7 +271,7 @@ def NearestNeighbour(X, y):
     # Predict the response for test dataset
     y_pred = knn.predict(X_test)
     print(y_pred)
-    print("Accuracy:", metrics.average_precision_score(y_test, y_pred))
+    print("Accuracy:", metrics.f1_score(y_test, y_pred))
 
 
 def NearestNeighbourCrossVal(X, y):
@@ -333,7 +332,7 @@ if __name__ == "__main__":
     # PCAFunc(data)
     # SVM(X,y)
     #Logistic(X, y)
-    # NearestNeighbour(X,y)
+    NearestNeighbour(X,y)
     # SVMCrossVal(X,y)
     # LogisticCrossVal(X,y)
     # NearestNeighbourCrossVal(X,y)
